@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Badr — 12 Week Program</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F5F5F0;color:#1a1a1a;max-width:430px;margin:0 auto;min-height:100vh}
+.header{background:#fff;border-bottom:1px solid #e5e5e5;padding:12px 16px;position:sticky;top:0;z-index:10}
+.header h1{font-size:15px;font-weight:500}
+.header p{font-size:11px;color:#888;margin-top:1px}
+.phase-tabs{display:flex;gap:6px;padding:10px 16px;background:#fff;border-bottom:1px solid #e5e5e5;overflow-x:auto}
+.phase-tabs::-webkit-scrollbar{display:none}
+.ptab{flex-shrink:0;padding:7px 14px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;font-size:12px;font-weight:500;color:#888;cursor:pointer}
+.ptab.active{border-width:1.5px}
+.ptab.p1.active{background:#E1F5EE;border-color:#5DCAA5;color:#085041}
+.ptab.p2.active{background:#E6F1FB;border-color:#85B7EB;color:#0C447C}
+.ptab.p3.active{background:#FAEEDA;border-color:#EF9F27;color:#633806}
+.week-tabs{display:flex;gap:5px;padding:8px 16px;background:#f5f5f0;overflow-x:auto;border-bottom:1px solid #e5e5e5}
+.week-tabs::-webkit-scrollbar{display:none}
+.wtab{flex-shrink:0;padding:6px 12px;border-radius:8px;border:1px solid #e5e5e5;background:#fff;font-size:11px;font-weight:500;color:#888;cursor:pointer}
+.wtab.active{background:#1a1a1a;border-color:#1a1a1a;color:#fff}
+.days-bar{display:flex;gap:5px;padding:8px 16px;background:#fff;border-bottom:1px solid #e5e5e5;overflow-x:auto}
+.days-bar::-webkit-scrollbar{display:none}
+.dc{flex-shrink:0;border-radius:8px;padding:7px 5px;text-align:center;border:1px solid #e5e5e5;cursor:pointer;min-width:42px;position:relative;transition:all .15s}
+.dc .dl{font-size:9px;color:#888;text-transform:uppercase;letter-spacing:.04em}
+.dc .dt{font-size:10px;font-weight:500;margin-top:2px}
+.dc.bjj{background:#E1F5EE;border-color:#9FE1CB}.dc.bjj .dt{color:#085041}
+.dc.gym{background:#E6F1FB;border-color:#B5D4F4}.dc.gym .dt{color:#0C447C}
+.dc.opt{background:#EEEDFE;border-color:#CECBF6}.dc.opt .dt{color:#3C3489}
+.dc.rest{background:#f5f5f0;cursor:default}.dc.rest .dt{color:#aaa}
+.dc.sel{outline:2px solid #378ADD;outline-offset:1px}
+.dc.done-day{position:relative}
+.dpip{position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:#1D9E75}
+.content{padding:12px 16px 80px}
+.phase-banner{border-radius:12px;padding:14px 16px;margin-bottom:12px}
+.phase-banner.p1{background:#E1F5EE;border:1px solid #5DCAA5}
+.phase-banner.p2{background:#E6F1FB;border:1px solid #85B7EB}
+.phase-banner.p3{background:#FAEEDA;border:1px solid #EF9F27}
+.pb-title{font-size:14px;font-weight:500}
+.pb-title.p1{color:#085041}.pb-title.p2{color:#0C447C}.pb-title.p3{color:#633806}
+.pb-desc{font-size:12px;margin-top:4px;line-height:1.5}
+.pb-desc.p1{color:#0F6E56}.pb-desc.p2{color:#185FA5}.pb-desc.p3{color:#854F0B}
+.tip-card{background:#E1F5EE;border:1px solid #9FE1CB;border-radius:10px;padding:10px 14px;margin-bottom:10px;font-size:12px;color:#085041;line-height:1.5}
+.prog-row{background:#fff;border:1px solid #e5e5e5;border-radius:10px;padding:12px 14px;margin-bottom:10px;display:flex;align-items:center;gap:10px}
+.prog-track{flex:1;height:6px;border-radius:3px;background:#f0f0f0;overflow:hidden}
+.prog-fill{height:100%;border-radius:3px;background:#1D9E75;transition:width .3s}
+.prog-lbl{font-size:11px;color:#888;white-space:nowrap}
+.done-btn{padding:7px 14px;border-radius:8px;border:1px solid #5DCAA5;background:#E1F5EE;color:#085041;font-size:12px;font-weight:500;cursor:pointer;white-space:nowrap}
+.done-btn:disabled{opacity:.35;cursor:default}
+.blabel{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.07em;padding:8px 2px 4px;display:flex;align-items:center;gap:4px}
+.ex-card{background:#fff;border:1px solid #e5e5e5;border-radius:12px;margin-bottom:8px;overflow:hidden}
+.ex-top{padding:11px 13px;display:flex;align-items:center;gap:8px;cursor:pointer}
+.ex-info{flex:1;min-width:0}
+.ex-name{font-size:13px;font-weight:500}
+.ex-target{font-size:11px;color:#888;margin-top:2px}
+.ex-note{font-size:11px;color:#0F6E56;margin-top:2px}
+.ex-new{font-size:10px;background:#E1F5EE;color:#085041;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:500}
+.ex-plyo{font-size:10px;background:#FAEEDA;color:#633806;border-radius:4px;padding:1px 5px;margin-left:5px;font-weight:500}
+.ex-right{display:flex;align-items:center;gap:5px;flex-shrink:0}
+.sets-badge{font-size:11px;font-weight:500;color:#1D9E75}
+.pr-badge{background:#FAEEDA;color:#633806;border-radius:4px;padding:1px 5px;font-size:10px;font-weight:500}
+.chev{color:#ccc;font-size:14px;transition:transform .2s}
+.chev.open{transform:rotate(180deg)}
+.sets-panel{border-top:1px solid #f0f0f0;padding:8px 13px 12px}
+.sets-table{width:100%;border-collapse:collapse;margin-bottom:6px}
+.sets-table th{font-size:10px;color:#888;text-transform:uppercase;letter-spacing:.04em;padding:3px;font-weight:500}
+.sets-table th.tc{text-align:center}
+.sets-table td{padding:3px;text-align:center}
+.sets-table td.tl{text-align:left;font-size:12px;color:#888}
+.si{width:52px;padding:5px 3px;border:1px solid #e5e5e5;border-radius:6px;font-size:13px;text-align:center;background:#f8f8f6}
+.si:focus{outline:none;border-color:#378ADD;background:#fff}
+.sc{width:28px;height:28px;border-radius:6px;border:1px solid #e5e5e5;background:#f8f8f6;cursor:pointer;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:13px;color:#aaa}
+.sc.on{background:#E1F5EE;border-color:#5DCAA5;color:#0F6E56}
+.rm{cursor:pointer;color:#ddd;font-size:13px;padding:4px}
+.add-set{width:100%;padding:7px;border:1px dashed #ccc;border-radius:8px;background:none;color:#888;font-size:12px;cursor:pointer;margin-top:2px}
+.hist-toggle{width:100%;margin-top:8px;padding:8px 12px;background:#f8f8f6;border:1px solid #e5e5e5;border-radius:8px;font-size:11px;color:#888;cursor:pointer;display:flex;justify-content:space-between}
+.hist-list{margin-top:4px;background:#f8f8f6;border:1px solid #e5e5e5;border-radius:8px;overflow:hidden}
+.hist-item{padding:8px 12px;border-bottom:1px solid #efefed;font-size:11px}
+.hist-item:last-child{border-bottom:none}
+.hist-date{color:#aaa;margin-bottom:3px;font-size:10px}
+.hist-sets{display:flex;gap:5px;flex-wrap:wrap}
+.hist-set{background:#fff;border-radius:4px;padding:2px 6px;font-size:10px;color:#555;border:1px solid #e5e5e5}
+.rest-msg{padding:3rem 1rem;text-align:center;color:#aaa;font-size:13px;line-height:2}
+.bjj-msg{padding:1.5rem 0;font-size:13px;color:#555;line-height:1.8}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1 id="htitle">Badr — 12 Week Program</h1>
+  <p id="hsub">Select a phase and week to begin</p>
+</div>
+<div class="phase-tabs">
+  <div class="ptab p1 active" onclick="selectPhase(1)">Phase 1 — Foundation</div>
+  <div class="ptab p2" onclick="selectPhase(2)">Phase 2 — Power</div>
+  <div class="ptab p3" onclick="selectPhase(3)">Phase 3 — Explosive</div>
+</div>
+<div class="week-tabs" id="weektabs"></div>
+<div class="days-bar" id="daysbar"></div>
+<div class="content" id="content"></div>
+
+<script>
+var DB={};
+var phase=1;
+var week=1;
+var day='tue';
+var openEx={};
+var openHist={};
+
+var DAYS=['mon','tue','wed','thu','fri','sat','sun'];
+var DLABELS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+
+var PHASE_INFO={
+  1:{cls:'p1',weeks:[1,2,3,4],title:'Phase 1 — Foundation (weeks 1-4)',desc:'Build movement patterns, activate glutes, protect knees, establish mobility. No plyometrics yet. The body must be ready before it can be explosive.'},
+  2:{cls:'p2',weeks:[5,6,7,8],title:'Phase 2 — Power (weeks 5-8)',desc:'Low-amplitude plyometrics introduced. Squat jumps, lateral bounds, pogo jumps. Load increases on main lifts. Neck harness begins. The spring starts to load.'},
+  3:{cls:'p3',weeks:[9,10,11,12],title:'Phase 3 — Explosive Athlete (weeks 9-12)',desc:'True plyometrics — depth drops, broad jumps, single-leg work. Peak strength loading. Maximum BJJ carryover. You become the spring.'}
+};
+
+var BLOCKS={
+  mob_a_p1:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'hip_cars_a',name:'Hip CARs',target:'2 min each side — slow, max range',note:'Active joint ownership — not stretching',def:2},
+    {id:'thor_cars',name:'Thoracic CARs on all fours',target:'10 reps each direction',note:'Unlocks desk-locked upper back',def:2},
+    {id:'nine090',name:'Active 90/90 transitions',target:'10 reps each way — muscle driven',note:'Hip internal rotation — BJJ essential',def:2}
+  ]},
+  mob_a_p2:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'hip_cars_a',name:'Hip CARs',target:'90s each side — faster tempo',note:'Maintaining range under fatigue',def:2},
+    {id:'thor_cars',name:'Thoracic CARs on all fours',target:'10 reps each direction',note:'Upper back mobility — keep doing this forever',def:2},
+    {id:'pails_hips',name:'Hip PAILs/RAILs',target:'60s stretch + 10s PAIL + 10s RAIL each side',note:'Own the range — not just visit it',def:2,isNew:true}
+  ]},
+  mob_a_p3:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'hip_cars_a',name:'Hip CARs',target:'60s each side — controlled speed',note:'Priming the joint for explosive work',def:2},
+    {id:'pails_hips',name:'Hip PAILs/RAILs',target:'60s + 10s PAIL + 10s RAIL each side',note:'Full hip range under load',def:2},
+    {id:'ankle_cars',name:'Ankle CARs + single-leg balance',target:'10 circles each + 30s eyes closed each side',note:'Ankle prep — critical for landing plyos',def:2,isNew:true}
+  ]},
+  str_a_p1:{label:'Strength',color:'#185FA5',exs:[
+    {id:'rdl',name:'Romanian deadlift',target:'4x6 — 3s eccentric, explosive up',note:'Posterior chain — zero knee shear',def:4},
+    {id:'tbdl',name:'Trap bar deadlift',target:'3x5 — max intent concentric',note:'Best power builder, safest for knees',def:3},
+    {id:'hip_thrust',name:'Hip thrust (barbell)',target:'4x8 — 1s squeeze at top',note:'Glute power — engine on the mat',def:4},
+    {id:'rfess',name:'Rear-foot elevated split squat',target:'3x8 each — bodyweight first, add load slowly',note:'Single-leg strength, low knee stress',def:3}
+  ]},
+  str_a_p2:{label:'Strength',color:'#185FA5',exs:[
+    {id:'rdl',name:'Romanian deadlift',target:'4x5 — heavier than phase 1',note:'Add 5-10% load vs phase 1',def:4},
+    {id:'tbdl',name:'Trap bar deadlift',target:'4x4 — heavier, still explosive intent',note:'Power + strength blend',def:4},
+    {id:'hip_thrust',name:'Hip thrust (barbell)',target:'4x6 — add load vs phase 1',note:'Heavier glute loading',def:4},
+    {id:'rfess',name:'Rear-foot elevated split squat',target:'4x8 each — loaded now',note:'Add dumbbell or barbell',def:4}
+  ]},
+  str_a_p3:{label:'Strength',color:'#185FA5',exs:[
+    {id:'rdl',name:'Romanian deadlift',target:'3x4 — peak load, max intent',note:'This is your strength expression week',def:3},
+    {id:'tbdl',name:'Trap bar deadlift',target:'3x3 — heaviest of the program',note:'Full power output',def:3},
+    {id:'hip_thrust',name:'Hip thrust (barbell)',target:'3x5 — peak load',note:'Max glute power',def:3},
+    {id:'rfess',name:'Rear-foot elevated split squat',target:'3x6 each — heavy',note:'Single-leg peak strength',def:3}
+  ]},
+  plyo_a_p2:{label:'Plyometrics — phase 2',color:'#854F0B',exs:[
+    {id:'squat_jump',name:'Squat jump',target:'3x6 — land soft, reset between reps',note:'Full squat down, explode up, absorb landing',def:3,isNew:true,isPlyo:true},
+    {id:'lateral_bound',name:'Lateral bound',target:'3x5 each side — stick the landing',note:'Push off one foot, land on the other, hold 2s',def:3,isNew:true,isPlyo:true}
+  ]},
+  plyo_a_p3:{label:'Plyometrics — phase 3',color:'#854F0B',exs:[
+    {id:'depth_drop',name:'Depth drop',target:'3x5 — step off box, absorb, hold',note:'15-20cm box. Land soft, knees tracking toes. No jump yet.',def:3,isNew:true,isPlyo:true},
+    {id:'broad_jump',name:'Broad jump',target:'3x4 — max distance, soft landing',note:'Two feet take-off, two feet land. Distance over height.',def:3,isPlyo:true},
+    {id:'pogo_jump',name:'Pogo jump',target:'3x10 — minimal ground contact',note:'Stiff ankles, spring from the floor. Calves and achilles.',def:3,isPlyo:true}
+  ]},
+  exp_a_p1:{label:'Explosive',color:'#854F0B',exs:[
+    {id:'kb_swing_a',name:'Kettlebell swing',target:'4x12 — hinge, snap the hips',note:'Hip drive, fat burn, BJJ carryover',def:4}
+  ]},
+  exp_a_p2:{label:'Explosive',color:'#854F0B',exs:[
+    {id:'kb_swing_a',name:'Kettlebell swing',target:'4x15 — heavier bell',note:'Increase load and volume vs phase 1',def:4},
+    {id:'kb_clean',name:'KB clean',target:'3x6 each — from swing to rack',note:'Power absorption — catch and stabilise',def:3,isNew:true}
+  ]},
+  exp_a_p3:{label:'Explosive',color:'#854F0B',exs:[
+    {id:'kb_swing_a',name:'Kettlebell swing',target:'3x10 — heaviest bell',note:'Max hip power expression',def:3},
+    {id:'kb_snatch',name:'KB snatch',target:'3x5 each — from floor to overhead',note:'Full body explosive chain',def:3,isNew:true}
+  ]},
+  knee:{label:'Knee rehab',color:'#534AB7',exs:[
+    {id:'tke',name:'Terminal knee extension (band)',target:'3x15 each leg — slow',note:'VMO — do every session forever',def:3},
+    {id:'short_foot',name:'Short foot exercise',target:'2x10 each — dome the arch, no toe curl',note:'Foot intrinsics — arch strength for knee tracking',def:2}
+  ]},
+  neck_p1:{label:'Neck — phase 1',color:'#A32D2D',exs:[
+    {id:'neck_iso',name:'4-way isometric (hand resistance)',target:'3x10s each direction',note:'Weeks 1-3: hand only. Week 4: light band.',def:3},
+    {id:'chin_tuck',name:'Chin tuck + controlled extension',target:'2x15 — 2s each rep',note:'Cervical health — protects in scrambles',def:2}
+  ]},
+  neck_p2:{label:'Neck — phase 2',color:'#A32D2D',exs:[
+    {id:'neck_harness',name:'Neck harness — flexion + extension',target:'3x12 — start light, add 1-2kg each week',note:'Real neck mass — earned over time',def:3,isNew:true},
+    {id:'chin_tuck',name:'Chin tuck + controlled extension',target:'2x15',note:'Keep this as a warm-down always',def:2}
+  ]},
+  neck_p3:{label:'Neck — phase 3',color:'#A32D2D',exs:[
+    {id:'neck_harness',name:'Neck harness — flexion + extension',target:'4x10 — heavier than phase 2',note:'Peak neck loading',def:4},
+    {id:'neck_lateral',name:'Side lateral neck raise',target:'3x10 each side',note:'Lateral neck — scramble and triangle protection',def:3}
+  ]},
+  mob_b_p1:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'shoulder_cars',name:'Shoulder CARs',target:'2 min each side — full rotation',note:'Own the shoulder joint',def:2},
+    {id:'jefferson',name:'Jefferson curl',target:'3x5 — very light, 4s down',note:'Loaded spinal flexion — end-range strength',def:3},
+    {id:'cossack',name:'Cossack squat (counterweight)',target:'3x8 each — hold plate',note:'Hip adductor mobility + knee-friendly',def:3}
+  ]},
+  mob_b_p2:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'shoulder_cars',name:'Shoulder CARs',target:'90s each side',note:'Maintain shoulder range under load',def:2},
+    {id:'jefferson',name:'Jefferson curl',target:'3x5 — slightly heavier than phase 1',note:'Progress the load carefully',def:3},
+    {id:'cossack',name:'Cossack squat (counterweight)',target:'3x8 each — add small load',note:'Deeper range as weeks progress',def:3}
+  ]},
+  mob_b_p3:{label:'Mobility warm-up',color:'#0F6E56',exs:[
+    {id:'shoulder_cars',name:'Shoulder CARs',target:'60s each side — faster tempo',note:'Priming for heavy pulling',def:2},
+    {id:'jefferson',name:'Jefferson curl',target:'3x4 — heavier, slow',note:'Peak spinal end-range strength',def:3},
+    {id:'pails_thor',name:'Thoracic PAILs/RAILs',target:'60s + 10s each direction',note:'Own thoracic rotation under load',def:2,isNew:true}
+  ]},
+  pull_p1:{label:'Pull',color:'#185FA5',exs:[
+    {id:'pullup',name:'Weighted pull-up / lat pulldown',target:'4x6 — full ROM, 3s eccentric',note:'Grip + back — grappling foundation',def:4},
+    {id:'db_row',name:'Dumbbell row (chest supported)',target:'4x8 each side',note:'Mid-back — no lower back load',def:4},
+    {id:'face_pull',name:'Face pull',target:'3x15 — external rotation',note:'Undo desk posture — never skip',def:3}
+  ]},
+  pull_p2:{label:'Pull',color:'#185FA5',exs:[
+    {id:'pullup',name:'Weighted pull-up',target:'4x5 — heavier than phase 1',note:'Increase load, full dead hang each rep',def:4},
+    {id:'db_row',name:'Dumbbell row (chest supported)',target:'4x6 each side — heavier',note:'Mid-back density',def:4},
+    {id:'face_pull',name:'Face pull',target:'3x15 — external rotation',note:'Never skip. Ever.',def:3},
+    {id:'dead_hang',name:'Dead hang',target:'3x max hold — 45s rest',note:'Grip + spine decompression',def:3,isNew:true}
+  ]},
+  pull_p3:{label:'Pull',color:'#185FA5',exs:[
+    {id:'pullup',name:'Weighted pull-up',target:'5x4 — heaviest of the program',note:'Peak pulling strength',def:5},
+    {id:'db_row',name:'Dumbbell row (chest supported)',target:'4x5 each side — heavy',note:'Back thickness peak',def:4},
+    {id:'face_pull',name:'Face pull',target:'3x15',note:'Shoulder health — always',def:3},
+    {id:'dead_hang',name:'Dead hang',target:'3x max hold',note:'Grip endurance maintenance',def:3}
+  ]},
+  push_p1:{label:'Push',color:'#854F0B',exs:[
+    {id:'floor_press',name:'Dumbbell floor press',target:'3x10 — neutral grip, controlled',note:'Chest — limits dangerous bottom range',def:3},
+    {id:'landmine',name:'Landmine press',target:'3x8 each side',note:'Rotational pressing power',def:3}
+  ]},
+  push_p2:{label:'Push',color:'#854F0B',exs:[
+    {id:'floor_press',name:'Dumbbell floor press',target:'3x8 — heavier than phase 1',note:'Progress the chest load',def:3},
+    {id:'landmine',name:'Landmine press',target:'3x6 each side — heavier',note:'More rotational power',def:3},
+    {id:'pushup_ring',name:'Ring push-up or archer push-up',target:'3x8 — controlled',note:'Chest stability under unstable load',def:3,isNew:true}
+  ]},
+  push_p3:{label:'Push',color:'#854F0B',exs:[
+    {id:'floor_press',name:'Dumbbell floor press',target:'3x6 — peak load',note:'Chest strength peak',def:3},
+    {id:'landmine',name:'Landmine press',target:'4x5 each side — heavy',note:'Peak rotational power',def:4},
+    {id:'plyo_pushup',name:'Plyometric push-up',target:'3x6 — hands leave floor',note:'Upper body explosive power — BJJ framing',def:3,isNew:true,isPlyo:true}
+  ]},
+  core_b:{label:'Explosive + core',color:'#854F0B',exs:[
+    {id:'farmers',name:'Farmers carry',target:'3x30m heavy',note:'Full tension, grip, fat burn',def:3},
+    {id:'dead_bug',name:'Dead bug',target:'3x6 each side — slow',note:'Anti-extension core stability',def:3},
+    {id:'bear_crawl',name:'Bear crawl',target:'4x10m fwd + 10m back',note:'Shoulder stability, BJJ pattern',def:4}
+  ]},
+  core_b_p2:{label:'Explosive + core',color:'#854F0B',exs:[
+    {id:'farmers',name:'Farmers carry',target:'3x30m — heavier than phase 1',note:'Full tension, grip, fat burn',def:3},
+    {id:'dead_bug',name:'Dead bug',target:'3x8 each side — add weight',note:'Progress with small weight on opposite arm/leg',def:3},
+    {id:'bear_crawl',name:'Bear crawl',target:'4x15m fwd + 15m back',note:'Longer distance, same quality',def:4},
+    {id:'lateral_bound_b',name:'Lateral bound',target:'3x5 each side — stick landing',note:'Lower body plyo — phase 2 intro',def:3,isNew:true,isPlyo:true}
+  ]},
+  core_b_p3:{label:'Explosive + core',color:'#854F0B',exs:[
+    {id:'farmers',name:'Farmers carry',target:'3x30m — heaviest of program',note:'Peak loaded carry',def:3},
+    {id:'dead_bug',name:'Dead bug',target:'3x8 each side — with load',note:'Core stability at peak',def:3},
+    {id:'med_ball_slam',name:'Medicine ball slam',target:'3x8 — max intent',note:'Full body explosive chain — direct BJJ carryover',def:3,isNew:true,isPlyo:true},
+    {id:'box_jump',name:'Box jump',target:'3x4 — step down, do not jump down',note:'Explosive power peak. Knees tracking over toes on landing.',def:3,isNew:true,isPlyo:true}
+  ]},
+  neck_b_p1:{label:'Neck',color:'#A32D2D',exs:[
+    {id:'neck_iso_b',name:'4-way isometric (hand resistance)',target:'3x10s each direction',note:'Phase 1 — hand resistance only',def:3},
+    {id:'neck_lateral_b',name:'Side lateral neck raise',target:'2x10 each side — very light',note:'Lateral neck — scramble protection',def:2}
+  ]},
+  neck_b_p2:{label:'Neck',color:'#A32D2D',exs:[
+    {id:'neck_harness_b',name:'Neck harness — flexion + extension',target:'3x12 — progressive load each week',note:'Real neck loading begins',def:3,isNew:true},
+    {id:'neck_lateral_b',name:'Side lateral neck raise',target:'3x10 each side',note:'Lateral neck consistency',def:3}
+  ]},
+  neck_b_p3:{label:'Neck',color:'#A32D2D',exs:[
+    {id:'neck_harness_b',name:'Neck harness — flexion + extension',target:'4x10 — heavy',note:'Peak neck strength',def:4},
+    {id:'neck_lateral_b',name:'Side lateral neck raise',target:'3x12 each side',note:'Lateral neck peak volume',def:3},
+    {id:'neck_iso_b',name:'Isometric holds — all directions',target:'2x20s each direction',note:'Endurance layer on top of strength',def:2}
+  ]}
+};
+
+function getGymA(p){
+  var blocks=[];
+  if(p===1)blocks=[BLOCKS.mob_a_p1,BLOCKS.str_a_p1,BLOCKS.exp_a_p1,BLOCKS.knee,BLOCKS.neck_p1];
+  if(p===2)blocks=[BLOCKS.mob_a_p2,BLOCKS.str_a_p2,BLOCKS.plyo_a_p2,BLOCKS.exp_a_p2,BLOCKS.knee,BLOCKS.neck_p2];
+  if(p===3)blocks=[BLOCKS.mob_a_p3,BLOCKS.str_a_p3,BLOCKS.plyo_a_p3,BLOCKS.exp_a_p3,BLOCKS.knee,BLOCKS.neck_p3];
+  var tips={1:'Rest 90s-2 min between strength sets. Full mobility warm-up before any barbell. Knees before everything.',2:'Load increases this phase. Still prioritise form over weight. Plyos go AFTER strength — legs need to be warm but not exhausted.',3:'Peak loading. If anything feels off, drop the weight. Express power on every rep — intent matters as much as load.'};
+  return{type:'gym',title:'Gym A · 90 min',sub:'Lower body power + knee + neck',tip:tips[p],blocks:blocks};
+}
+
+function getGymB(p){
+  var blocks=[];
+  if(p===1)blocks=[BLOCKS.mob_b_p1,BLOCKS.pull_p1,BLOCKS.push_p1,BLOCKS.core_b,BLOCKS.neck_b_p1];
+  if(p===2)blocks=[BLOCKS.mob_b_p2,BLOCKS.pull_p2,BLOCKS.push_p2,BLOCKS.core_b_p2,BLOCKS.neck_b_p2];
+  if(p===3)blocks=[BLOCKS.mob_b_p3,BLOCKS.pull_p3,BLOCKS.push_p3,BLOCKS.core_b_p3,BLOCKS.neck_b_p3];
+  var tips={1:'Keep pull-to-push 2:1. Neck work always last. Jefferson curl stays light.',2:'Pulling load increases. Neck harness begins — start very light, add 1-2kg each week.',3:'Peak upper body session. Plyometric push-up is controlled — quality over reps.'};
+  return{type:'gym',title:'Gym B · 90 min',sub:'Upper pull + chest + loaded mobility + neck',tip:tips[p],blocks:blocks};
+}
+
+function getFullBody(p){
+  var exs_lower_p1=[
+    {id:'tbdl_thu',name:'Trap bar deadlift',target:'3x4 — 80% effort, fast up',note:'Power stimulus — not max effort',def:3},
+    {id:'goblet',name:'KB goblet squat',target:'3x8 — full depth if knees allow',note:'Quad + glute, knee-friendly',def:3},
+    {id:'sl_hip_thrust',name:'Single-leg hip thrust',target:'3x8 each — bodyweight',note:'Glute isolation — no barbell today',def:3}
+  ];
+  var exs_lower_p2=[
+    {id:'tbdl_thu',name:'Trap bar deadlift',target:'3x4 — 85% effort',note:'Heavier than phase 1 Thursdays',def:3},
+    {id:'goblet',name:'KB goblet squat',target:'3x8 — heavier bell',note:'Progress load',def:3},
+    {id:'sl_hip_thrust',name:'Single-leg hip thrust',target:'3x8 each — add small load',note:'Bodyweight + band or plate',def:3},
+    {id:'broad_jump_thu',name:'Broad jump',target:'3x4 — max distance',note:'Lower body plyo introduced Thursday',def:3,isNew:true,isPlyo:true}
+  ];
+  var exs_lower_p3=[
+    {id:'tbdl_thu',name:'Trap bar deadlift',target:'3x3 — 90% effort',note:'Peak Thursday lower body load',def:3},
+    {id:'sl_hip_thrust',name:'Single-leg hip thrust',target:'3x6 each — loaded',note:'Single-leg peak power',def:3},
+    {id:'depth_drop_thu',name:'Depth drop to broad jump',target:'3x4 — step off, land, jump forward',note:'Reactive strength — the full spring',def:3,isNew:true,isPlyo:true}
+  ];
+  var exs_upper=[
+    {id:'db_row_thu',name:'Dumbbell row (chest supported)',target:'3x8 each',note:'Back — pulling always leads',def:3},
+    {id:'floor_press_thu',name:'Dumbbell floor press',target:'3x10 — moderate weight',note:'Chest — shoulder safe',def:3},
+    {id:'face_pull_thu',name:'Face pull',target:'2x15',note:'Shoulder health — never skip',def:2}
+  ];
+  var exs_fin_p1=[
+    {id:'kb_swing_thu',name:'KB swing',target:'3x15 — max hip snap',note:'Ends with power',def:3},
+    {id:'dead_bug_thu',name:'Dead bug',target:'2x6 each side',note:'Core — protect spine for Friday',def:2}
+  ];
+  var exs_fin_p2=[
+    {id:'kb_swing_thu',name:'KB swing',target:'3x12 — heavier bell',note:'Power finisher',def:3},
+    {id:'dead_bug_thu',name:'Dead bug',target:'2x8 each side',note:'Core stability',def:2},
+    {id:'pogo_thu',name:'Pogo jump',target:'2x15 — minimal ground contact',note:'Ankle spring — calf and achilles',def:2,isNew:true,isPlyo:true}
+  ];
+  var exs_fin_p3=[
+    {id:'kb_snatch_thu',name:'KB snatch',target:'3x5 each — explosive',note:'Full chain power finisher',def:3},
+    {id:'med_ball_thu',name:'Medicine ball rotational throw',target:'3x6 each side',note:'Rotational power — BJJ hip snap',def:3,isNew:true,isPlyo:true}
+  ];
+
+  var lower=p===1?exs_lower_p1:p===2?exs_lower_p2:exs_lower_p3;
+  var fin=p===1?exs_fin_p1:p===2?exs_fin_p2:exs_fin_p3;
+  var mob_exs=[
+    {id:'hip_cars_thu',name:'Hip CARs',target:'90s each side',note:'Shorter today — power day',def:2},
+    {id:'thor_rot',name:'Thoracic rotation in quadruped',target:'8 reps each side',note:'Upper back prep',def:2}
+  ];
+
+  return{type:'gym',title:'Thu — full body power · 60 min',sub:'Moderate load, explosive intent — BJJ tomorrow',
+    tip:'60 min max. Leave the gym feeling you could do more. BJJ tomorrow — do not grind.',
+    blocks:[
+      {label:'Mobility warm-up',color:'#0F6E56',exs:mob_exs},
+      {label:'Lower body',color:'#185FA5',exs:lower},
+      {label:'Upper body',color:'#854F0B',exs:exs_upper},
+      {label:'Explosive finisher',color:'#854F0B',exs:fin}
+    ]};
+}
+
+function getSession(d,p,w){
+  var thuMod=((w-1)%3)+1;
+  if(d==='tue')return getGymA(p);
+  if(d==='sat')return getGymB(p);
+  if(d==='sun')return{type:'rest',title:'Rest',sub:'Full recovery',tip:'',blocks:[]};
+  if(d==='thu'){
+    if(thuMod===1)return{type:'bjj',title:'Thursday — BJJ',sub:'Mat session',tip:'Normal training. This is your priority Thursday.',blocks:[]};
+    if(thuMod===2)return{type:'opt',title:'Thu — hill sprints · 35 min',sub:'Explosive conditioning',tip:'5 min walk → hip CARs + leg swings → 3 build-up runs → 6-8 x 20s uphill max effort, walk back 90s → 5 min cool-down. Stop at 6 reps if form drops.',blocks:[]};
+    return getFullBody(p);
+  }
+  var bjjTips={
+    1:'Jump rope 5 min → Dead hang 3x max hold → Hip CARs 5 circles each side → Foot: short foot 2x10, toe spread 2x8, single-leg calf raise 2x10',
+    2:'Jump rope 5 min → Dead hang 3x max hold → Hip CARs + active 90/90 → Pogo jump 2x10 (quick ground contact) → Foot activation 2x10 each',
+    3:'Jump rope 5 min → Dead hang 3x max hold → Hip CARs → Lateral bound 3x3 each side — prime the spring before class → Foot activation'
+  };
+  return{type:'bjj',title:'BJJ day',sub:'Pre-mat activation — 15 min before class',tip:bjjTips[p],blocks:[]};
+}
+
+function getDayType(d,w){
+  if(d==='tue'||d==='sat')return'gym';
+  if(d==='sun')return'rest';
+  if(d==='thu')return'opt';
+  return'bjj';
+}
+
+function getDayLabel(d,w){
+  var m={mon:'BJJ',tue:'Gym A',wed:'BJJ',fri:'BJJ',sat:'Gym B',sun:'Rest'};
+  if(d==='thu'){var thuMod=((w-1)%3)+1;if(thuMod===1)return'BJJ';if(thuMod===2)return'Sprints';return'Full body';}
+  return m[d]||'';
+}
+
+function sk(p,w,d){return'p'+p+'w'+w+'_'+d;}
+function loadDB(){try{var s=localStorage.getItem('badr_12w');if(s)DB=JSON.parse(s);}catch(e){DB={};}}
+function saveDB(){try{localStorage.setItem('badr_12w',JSON.stringify(DB));}catch(e){}}
+function getSets(p,w,d,exId){var k=sk(p,w,d);if(!DB[k])DB[k]={sets:{},done:false};if(!DB[k].sets[exId])DB[k].sets[exId]=[];return DB[k].sets[exId];}
+function isDone(p,w,d){return !!(DB[sk(p,w,d)]&&DB[sk(p,w,d)].done);}
+function markDone(p,w,d){var k=sk(p,w,d);if(!DB[k])DB[k]={sets:{},done:false};DB[k].done=true;saveDB();}
+
+function getPR(exId){
+  var pr=0;
+  Object.keys(DB).forEach(function(k){
+    var sets=(DB[k].sets&&DB[k].sets[exId])||[];
+    sets.forEach(function(s){if(s.checked&&s.weight&&parseFloat(s.weight)>pr)pr=parseFloat(s.weight);});
+  });
+  return pr;
+}
+
+function getHistory(exId){
+  var hist=[];
+  Object.keys(DB).forEach(function(k){
+    var sets=(DB[k].sets&&DB[k].sets[exId])||[];
+    if(sets.filter(function(s){return s.weight||s.reps;}).length){
+      hist.push({key:k,sets:sets});
+    }
+  });
+  hist.sort(function(a,b){return a.key<b.key?1:-1;});
+  return hist.slice(0,5);
+}
+
+function countProgress(p,w,d,session){
+  var total=0,done=0;
+  session.blocks.forEach(function(b){
+    b.exs.forEach(function(e){
+      var sets=getSets(p,w,d,e.id);
+      total+=sets.length;
+      sets.forEach(function(s){if(s.checked)done++;});
+    });
+  });
+  return{total:total,done:done};
+}
+
+function selectPhase(p){
+  phase=p;week=PHASE_INFO[p].weeks[0];day='tue';openEx={};openHist={};
+  document.querySelectorAll('.ptab').forEach(function(t){t.classList.remove('active');});
+  document.querySelectorAll('.ptab')[p-1].classList.add('active');
+  renderWeekTabs();renderDays();renderContent();
+}
+window.selectPhase=selectPhase;
+
+function selectWeek(w){week=w;day='tue';openEx={};openHist={};renderWeekTabs();renderDays();renderContent();}
+window.selectWeek=selectWeek;
+
+function selectDay(d){day=d;openEx={};openHist={};renderDays();renderContent();}
+window.selectDay=selectDay;
+
+function toggleEx(id){openEx[id]=!openEx[id];renderContent();}
+window.toggleEx=toggleEx;
+
+function toggleHist(id){openHist[id]=!openHist[id];renderContent();}
+window.toggleHist=toggleHist;
+
+function addSet(exId){var sets=getSets(phase,week,day,exId);sets.push({weight:'',reps:'',checked:false});saveDB();openEx[exId]=true;renderContent();}
+window.addSet=addSet;
+
+function removeSet(exId,idx){var sets=getSets(phase,week,day,exId);sets.splice(idx,1);saveDB();renderContent();}
+window.removeSet=removeSet;
+
+function updateField(exId,idx,field,val){
+  var sets=getSets(phase,week,day,exId);
+  if(sets[idx])sets[idx][field]=val;
+  saveDB();
+  var p2=countProgress(phase,week,day,getSession(day,phase,week));
+  var pct=p2.total?Math.round(p2.done/p2.total*100):0;
+  var f=document.getElementById('pf');var l=document.getElementById('pl');
+  if(f)f.style.width=pct+'%';
+  if(l)l.textContent=p2.done+'/'+p2.total+' sets';
+}
+window.updateField=updateField;
+
+function toggleCheck(exId,idx){
+  var sets=getSets(phase,week,day,exId);
+  if(sets[idx])sets[idx].checked=!sets[idx].checked;
+  saveDB();renderContent();
+}
+window.toggleCheck=toggleCheck;
+
+function finishSession(){markDone(phase,week,day);renderDays();renderContent();}
+window.finishSession=finishSession;
+
+function renderWeekTabs(){
+  var container=document.getElementById('weektabs');
+  var html='';
+  PHASE_INFO[phase].weeks.forEach(function(w){
+    html+='<div class="wtab'+(w===week?' active':'')+'" onclick="selectWeek('+w+')">Week '+w+'</div>';
+  });
+  container.innerHTML=html;
+}
+
+function renderDays(){
+  var bar=document.getElementById('daysbar');
+  var html='';
+  DAYS.forEach(function(d,i){
+    var type=getDayType(d,week);
+    var label=getDayLabel(d,week);
+    var done=isDone(phase,week,d);
+    var sel=d===day;
+    html+='<div class="dc '+type+(sel?' sel':'')+(done?' done-day':'')+'"';
+    if(type!=='rest')html+=' onclick="selectDay(\''+d+'\')"';
+    html+='>';
+    if(done)html+='<div class="dpip"></div>';
+    html+='<div class="dl">'+DLABELS[i]+'</div><div class="dt">'+label+'</div></div>';
+  });
+  bar.innerHTML=html;
+}
+
+function renderContent(){
+  var session=getSession(day,phase,week);
+  var phaseInfo=PHASE_INFO[phase];
+  document.getElementById('htitle').textContent='Week '+week+' — '+getDayLabel(day,week);
+  document.getElementById('hsub').textContent=session.sub;
+
+  if(session.type==='rest'){
+    document.getElementById('content').innerHTML='<div class="rest-msg">Full rest day.<br>Recovery is training.<br>Sleep, eat, recharge.</div>';
+    return;
+  }
+
+  var html='';
+  html+='<div class="phase-banner '+phaseInfo.cls+'">';
+  html+='<div class="pb-title '+phaseInfo.cls+'">'+phaseInfo.title+'</div>';
+  html+='<div class="pb-desc '+phaseInfo.cls+'">'+phaseInfo.desc+'</div>';
+  html+='</div>';
+
+  if(session.blocks.length){
+    var p2=countProgress(phase,week,day,session);
+    var pct=p2.total?Math.round(p2.done/p2.total*100):0;
+    html+='<div class="prog-row">';
+    html+='<div class="prog-track"><div class="prog-fill" id="pf" style="width:'+pct+'%"></div></div>';
+    html+='<span class="prog-lbl" id="pl">'+p2.done+'/'+p2.total+' sets</span>';
+    html+='<button class="done-btn"'+(p2.done===0?' disabled':'')+' onclick="finishSession()">Done</button>';
+    html+='</div>';
+  }
+
+  if(session.tip){
+    html+='<div class="tip-card">'+session.tip+'</div>';
+  }
+
+  if(!session.blocks.length){
+    document.getElementById('content').innerHTML=html;
+    return;
+  }
+
+  session.blocks.forEach(function(b){
+    html+='<div class="blabel" style="color:'+b.color+'">'+b.label+'</div>';
+    b.exs.forEach(function(e){
+      var sets=getSets(phase,week,day,e.id);
+      var isOpen=!!openEx[e.id];
+      var isHistOpen=!!openHist[e.id];
+      var checkedCount=0;
+      sets.forEach(function(s){if(s.checked)checkedCount++;});
+      var pr=getPR(e.id);
+      var hist=getHistory(e.id);
+
+      if(sets.length===0&&isOpen){
+        for(var i=0;i<(e.def||3);i++)sets.push({weight:'',reps:'',checked:false});
+        saveDB();
+      }
+
+      html+='<div class="ex-card">';
+      html+='<div class="ex-top" onclick="toggleEx(\''+e.id+'\')">';
+      html+='<div class="ex-info">';
+      html+='<div class="ex-name">'+e.name;
+      if(e.isNew)html+='<span class="ex-new">new</span>';
+      if(e.isPlyo)html+='<span class="ex-plyo">plyo</span>';
+      if(pr>0)html+='<span class="pr-badge">PR '+pr+'kg</span>';
+      html+='</div>';
+      html+='<div class="ex-target">'+e.target+'</div>';
+      html+='<div class="ex-note">'+e.note+'</div>';
+      html+='</div>';
+      html+='<div class="ex-right">';
+      if(checkedCount>0)html+='<span class="sets-badge">'+checkedCount+'/'+sets.length+'</span>';
+      html+='<span class="chev'+(isOpen?' open':'')+'">&#8964;</span>';
+      html+='</div></div>';
+
+      if(isOpen){
+        html+='<div class="sets-panel">';
+        html+='<table class="sets-table"><thead><tr>';
+        html+='<th class="tl">Set</th><th class="tc">kg</th><th class="tc">Reps</th><th class="tc">Done</th><th></th>';
+        html+='</tr></thead><tbody>';
+        sets.forEach(function(s,idx){
+          html+='<tr>';
+          html+='<td class="tl">'+(idx+1)+'</td>';
+          html+='<td><input class="si" type="number" inputmode="decimal" placeholder="kg" value="'+(s.weight||'')+'" onchange="updateField(\''+e.id+'\','+idx+',\'weight\',this.value)"></td>';
+          html+='<td><input class="si" type="number" inputmode="numeric" placeholder="reps" value="'+(s.reps||'')+'" onchange="updateField(\''+e.id+'\','+idx+',\'reps\',this.value)"></td>';
+          html+='<td><div class="sc'+(s.checked?' on':'')+'" onclick="toggleCheck(\''+e.id+'\','+idx+')">'+(s.checked?'&#10003;':'')+'</div></td>';
+          html+='<td><div class="rm" onclick="removeSet(\''+e.id+'\','+idx+')">&#10005;</div></td>';
+          html+='</tr>';
+        });
+        html+='</tbody></table>';
+        html+='<button class="add-set" onclick="addSet(\''+e.id+'\')">+ add set</button>';
+        if(hist.length>0){
+          html+='<button class="hist-toggle" onclick="toggleHist(\''+e.id+'\')">';
+          html+='<span>Previous sessions</span><span>'+(isHistOpen?'&#8963;':'&#8964;')+'</span></button>';
+          if(isHistOpen){
+            html+='<div class="hist-list">';
+            hist.forEach(function(h){
+              html+='<div class="hist-item">';
+              html+='<div class="hist-date">'+h.key+'</div>';
+              html+='<div class="hist-sets">';
+              h.sets.forEach(function(s,i){
+                if(s.weight||s.reps){
+                  html+='<span class="hist-set">S'+(i+1)+': '+(s.weight?s.weight+'kg':'—')+' x '+(s.reps||'—')+'</span>';
+                }
+              });
+              html+='</div></div>';
+            });
+            html+='</div>';
+          }
+        }
+        html+='</div>';
+      }
+      html+='</div>';
+    });
+  });
+
+  document.getElementById('content').innerHTML=html;
+}
+
+loadDB();
+renderWeekTabs();
+renderDays();
+renderContent();
+</script>
+</body>
+</html>
